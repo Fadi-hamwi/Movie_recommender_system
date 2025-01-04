@@ -67,7 +67,7 @@ public class MoviesController {
      *         represented as {@link Movie} objects
      */
     @GetMapping(GET_SEARCH + SEARCH_QUERY)
-    public List<Movie> search(@PathVariable("query") String query) {
+    public List<Movie> search(@PathVariable String query) {
         return service.search(query);
     }
 
@@ -80,7 +80,7 @@ public class MoviesController {
      *         represented as {@link Movie} objects
      */
     @GetMapping(GET_SEARCHES)
-    public List<Movie> search(@RequestParam List<String> queries) {
+    public List<Movie> search(@RequestParam(QUERY_PARAM) List<String> queries) {
         return service.search(queries);
     }
 }

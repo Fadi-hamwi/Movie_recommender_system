@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -107,39 +108,35 @@ public class MoviesTest {
 
     @Test
     public void testSearchMoviesManyContents() {
-        var watchedMovies = List
-            .of("Trek", "War");
+        // Test data: List of search terms
+        var watchedMovies = List.of("Trek", "War");
 
-        var matchingMovies = mMoviesSyncProxy
-            .searchMovies(watchedMovies);
+        // Call the method under test
+        var matchingMovies = mMoviesSyncProxy.searchMovies(watchedMovies);
 
-        var iterator =
-            mMovies.entrySet().iterator();
-
-        int cnt = 0;
-        for (Movie matchingMovie : matchingMovies) {
-            String matchedMovie = "";
-
-            outer:
-            while (iterator.hasNext()) {
-                var nextMovie = iterator.next().getKey();
-
-                for (var searchWord : watchedMovies)
-                    if (nextMovie.toLowerCase()
-                        .contains(searchWord.toLowerCase())) {
-                        matchedMovie = nextMovie;
-                        break outer;
-                    }
-            }
-
-            for(Movie movie : matchingMovies) {
-                if(movie.id().equals(matchedMovie)) {
-                    cnt++;
+        // Collect all movies from mMovies that match any of the search terms
+        var expectedMatchingMovies = new ArrayList<String>();
+        for (var entry : mMovies.entrySet()) {
+            String movieId = entry.getKey();
+            for (var searchWord : watchedMovies) {
+                if (movieId.toLowerCase().contains(searchWord.toLowerCase())) {
+                    expectedMatchingMovies.add(movieId);
+                    break; // No need to check other search words for this movie
                 }
             }
-                         
         }
-        assertEquals(cnt, matchingMovies.size());
+
+        // Verify that all expected movies are in the matchingMovies list
+        for (var expectedMovieId : expectedMatchingMovies) {
+            boolean found = false;
+            for (var matchingMovie : matchingMovies) {
+                if (matchingMovie.id().equals(expectedMovieId)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(found, "Movie with ID " + expectedMovieId + " should be included in matchingMovies");
+        }
     }
 }
     

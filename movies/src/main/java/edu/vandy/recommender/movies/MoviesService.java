@@ -46,7 +46,7 @@ public class MoviesService {
     public List<Movie> search(String query) {
         return mMovies
                 .stream()
-                .filter(m -> m.id().toLowerCase().contains(query.toLowerCase()))
+                .filter(movie -> movie.id().toLowerCase().contains(query.toLowerCase()))
                 .distinct()
                 .toList();
     }

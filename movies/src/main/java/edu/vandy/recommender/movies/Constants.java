@@ -15,6 +15,7 @@ public class Constants {
         public static final String GET_SEARCH = "search";
         public static final String GET_SEARCHES = "searches";
         public static final String SEARCH_QUERY = "/{query}";
+        public static final String QUERY_PARAM = "queries";
     }
 
     /**

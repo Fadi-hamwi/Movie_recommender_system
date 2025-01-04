@@ -76,7 +76,7 @@ public class MoviesSyncProxy {
 
         String url = UriComponentsBuilder
                 .fromPath(GET_SEARCHES)
-                .query(queries.stream().map(q -> "queries=" + q).collect(Collectors.joining("&")))
+                .queryParam(QUERY_PARAM, WebUtils.list2String(queries))
                 .build()
                 .toUriString();
 
